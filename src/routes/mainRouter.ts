@@ -1,15 +1,45 @@
 import { Router } from "express";
-import Controller from "../controller/Controllers";
+import { register } from "../controller/ControllerTwo";
+
+// Instanciando o controller
+
+// Criação da rota com função anônima para garantir o contexto correto
+const mainRouter = Router();
+
+// Usando uma função wrapper para chamar o método Register
+
+mainRouter.get('/auth/register', register);
 
 
-// instanciando o controller 
-const ControllerRoutes = new Controller;
+// Certifique-se de usar bind para manter o contexto do "this"
 
-// criação da rota;
-const mainRouter =  Router();
+// Exportando as rotas
 
 
-mainRouter.get('/home', ControllerRoutes.Home);
-mainRouter.post('/teste', ControllerRoutes.Post);
+
+
+
+// mainRouter.post('/auth/login',);
+// mainRouter.post('/tweet');
+// mainRouter.get('/tweet/:id');
+// mainRouter.get('/tweet/:id/answers');
+// mainRouter.post('/tweet/:id/like');
+
+
+// mainRouter.get('/user/:slug');
+// mainRouter.post('/user/:slug/tweets');
+// mainRouter.post('/user/:slug/follow');
+// mainRouter.put('/user');
+// mainRouter.post('/user/avatar');
+// mainRouter.post('/user/cover');
+
+
+// mainRouter.get('/feed');
+// mainRouter.get('/search');
+// mainRouter.get('/trending');
+// mainRouter.get('/suggestions');
+
+
+
 
 export default mainRouter;

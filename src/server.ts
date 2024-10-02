@@ -16,11 +16,7 @@ server.use(mainRouter);
 
 
 server.listen(process.env.PORT || 3000, () => {
+    const port = process.env.PORT || 3000;
 
-    if(3000) {
-        console.log(`Server is running on port ${process.env.BASE_URL}`);
-        return;
-    }
-
-    console.log(`Server is running on port ${process.env.BASE_URL}`);
+    console.log(`Server is running on port http://localhost:${port}`);
 });
