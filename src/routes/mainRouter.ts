@@ -1,26 +1,16 @@
 import { Router } from "express";
-import { register } from "../controller/ControllerTwo";
+import Controller from "../controller/Controller";
+import  VerificationService  from "../../model/utils/verifyToken";
 
-// Instanciando o controller
 
-// Criação da rota com função anônima para garantir o contexto correto
 const mainRouter = Router();
 
-// Usando uma função wrapper para chamar o método Register
-
-mainRouter.get('/auth/register', register);
-
-
-// Certifique-se de usar bind para manter o contexto do "this"
-
-// Exportando as rotas
+mainRouter.post('/auth/register', Controller.register);
+mainRouter.post('/auth/login', Controller.login);
+mainRouter.get('/ping', VerificationService.getVerification, Controller.pong);
+mainRouter.post('/tweet', VerificationService.getVerification, Controller.TweeterPost);
 
 
-
-
-
-// mainRouter.post('/auth/login',);
-// mainRouter.post('/tweet');
 // mainRouter.get('/tweet/:id');
 // mainRouter.get('/tweet/:id/answers');
 // mainRouter.post('/tweet/:id/like');

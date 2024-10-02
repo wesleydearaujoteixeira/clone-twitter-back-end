@@ -12,7 +12,7 @@ export const findUserByEmail = async (email: string) => {
     });
 
 
-    if(user) {
+    if(user) { 
         return {
             ...user,
             avatar: getPublicUrl(user.avatar),
@@ -28,9 +28,7 @@ export const findUserByEmail = async (email: string) => {
 
 
 
-export const findUserBySlug = async (slug: string) => {
-
-    
+export const findUserBySlug = async (slug: string) => {    
 
     const user = await prisma.user.findFirst({
         select: {

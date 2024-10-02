@@ -6,4 +6,13 @@ export const schemaObject = z.object({
     password: z.string({ message: "senha é obrigatória "}).min(4, "precisa ser de no mínimo 4 digitos"),
 });
 
+export const schemaLoginObject = z.object({
+    email: z.string({ message: " Email é obrigatório "}).email('E-mail inválido'),
+    password: z.string({ message: "senha é obrigatória "}).min(4, "precisa ser de no mínimo 4 digitos"),
+});
 
+
+export const schemaPOSTObject = z.object({
+    body: z.string({ message: "É necessário um corpo para os comentarios "}),
+    answer: z.string().optional()
+});
