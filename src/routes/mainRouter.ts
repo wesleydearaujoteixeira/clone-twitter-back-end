@@ -9,11 +9,9 @@ mainRouter.post('/auth/register', Controller.register);
 mainRouter.post('/auth/login', Controller.login);
 mainRouter.get('/ping', VerificationService.getVerification, Controller.pong);
 mainRouter.post('/tweet', VerificationService.getVerification, Controller.TweeterPost);
-
-
-// mainRouter.get('/tweet/:id');
-// mainRouter.get('/tweet/:id/answers');
-// mainRouter.post('/tweet/:id/like');
+mainRouter.get('/tweet/:id', VerificationService.getVerification, Controller.TweeterGetId);
+mainRouter.get('/tweet/:id/answers', VerificationService.getVerification, Controller.getAnswers);
+mainRouter.post('/tweet/:id/like' , VerificationService.getVerification, Controller.isLiked);
 
 
 // mainRouter.get('/user/:slug');

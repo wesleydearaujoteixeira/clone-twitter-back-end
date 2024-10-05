@@ -5,7 +5,11 @@ import slug from "slug";
 import { compare, hashSync } from "bcrypt-ts";
 import { createToken } from "../../model/utils/create-token-slug"
 import { ExtendRequest } from "../../model/utils/types/extended-request";
-import { findTwitter, createTwetter, addHashtag } from "../services/twetter";
+import { findTwitter, createTwetter, addHashtag, 
+    findAnswersFromTweet, 
+    GetLikedService,
+    unlikeTweet,
+    likeTweet } from "../services/twetter";
 
 
 
@@ -174,5 +178,72 @@ export default class Controller {
             
         }
 }
+
+    static async TweeterGetId(req: ExtendRequest, res: Response): Promise<any> {
+
+        const { id } = req.params;
+
+        const tweet = await findTwitter(parseInt(id));
+        
+        if(!tweet) {
+            return res.status(404).json({ error: "Tweet Inexistente! " });
+        }
+
+        return res.json({
+            message: "Tweet Encontrado!",
+            tweet,
+        });
+
+    }
+
+    static async getAnswers(req: ExtendRequest, res: Response): Promise<any> {
+
+        const {id} = req.params;
+
+        const answer = await findAnswersFromTweet(parseInt(id));
+
+        res.status(200).json({ answer });
+
+    }
+    
+    static async isLiked (req: ExtendRequest, res: Response): Promise<any> 
+    
+    {
+
+       try {
+        const liked = await GetLikedService(
+            req.userSlug as string,
+            parseInt(req.params.id)
+        );
+
+        if(liked) { 
+            unlikeTweet(
+                req.userSlug as string,
+                parseInt(req.params.id)
+            )
+
+            return res.status(200).json({
+                message: "Tweet deslikado com sucesso!",
+            });
+
+        }else {
+            likeTweet(
+                req.userSlug as string,
+                parseInt(req.params.id)
+            )
+
+            return res.status(200).json({
+                message: "Tweet likado com sucesso!",
+            });
+        }
+
+
+
+       } catch (error) {
+            return res.status(500).json({error})
+       }
+
+    }
+
 
 }

@@ -70,3 +70,71 @@ export const addHashtag = async (hashtag: string) => {
 
 
 }
+
+
+export const findAnswersFromTweet = async (id: number) => {
+  
+    const answers = await prisma.tweet.findMany({
+
+        include: {
+
+            user: {
+                select: {
+                    name: true,
+                    avatar: true,
+                    slug: true
+                }
+            },
+
+            likes: {
+                select: {
+                    userSlug: true,
+                }
+            },
+
+        },
+
+
+        where: { answerOf: id },
+    });
+
+
+
+    for(let tweetIndex in answers){
+        answers[tweetIndex].user.avatar = getPublicUrl(answers[tweetIndex].user.avatar);
+
+    }
+
+
+    return answers;
+
+
+}
+
+export const GetLikedService = async (userSlug: string, id: number) => {
+
+    const likedOn = await prisma.tweetLikes.findFirst({
+        where: { 
+            userSlug: userSlug,
+            tweetId: id
+         },
+        
+    });
+
+    return likedOn ? true : false;
+
+
+
+}
+
+export const unlikeTweet = async (userSlug: string, id: number) => { 
+        await prisma.tweetLikes.deleteMany({
+            where: { userSlug, tweetId: id }
+        });
+}
+
+export const likeTweet = async (userSlug: string, id: number) => { 
+    await prisma.tweetLikes.create({
+        data: { userSlug, tweetId: id}
+    });
+}
