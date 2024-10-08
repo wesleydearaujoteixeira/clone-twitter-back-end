@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { schemaLoginObject, schemaObject, schemaPOSTObject  } from "../schemas/register";
+import { schemaLoginObject, schemaObject, schemaPOSTObject, schemaQueryObject  } from "../schemas/register";
 import { createUser, findUserByEmail, findUserBySlug } from "../services/users";
 import slug from "slug";
 import { compare, hashSync } from "bcrypt-ts";
@@ -9,7 +9,11 @@ import { findTwitter, createTwetter, addHashtag,
     findAnswersFromTweet, 
     GetLikedService,
     unlikeTweet,
-    likeTweet } from "../services/twetter";
+    likeTweet, 
+    followTweet,
+    followTweetTwo,
+    getTweetFollowers,
+    getTweetServices} from "../services/twetter";
 
 
 
@@ -244,6 +248,67 @@ export default class Controller {
        }
 
     }
+
+    static async userByIslug(req: ExtendRequest, res: Response): Promise<any> {
+            const { islug } = req.params
+
+            const user = await findUserBySlug(islug);
+
+            if(!user) {
+                return res.status(404).json({ error: "Usuário não encontrado! " });
+            }
+
+
+
+            const countTweet = await followTweet(user.slug);
+            const countFollowing = await followTweetTwo(user.slug);
+            const total = await getTweetFollowers(user.slug);
+
+
+            return res.json({
+                message: "Usuário Encontrado!",
+                user,
+                information: {
+                    tweet: countTweet,
+                    following: countFollowing,
+                    total,
+                }
+            });
+
+    }
+
+    static async TweetUser(req: ExtendRequest, res: Response): Promise<any> {
+        
+        const { slug } = req.params;
+        
+        try{
+
+            const safeDATA = schemaQueryObject.safeParse(req.query);
+    
+            if (!safeDATA.success) {
+                return res.status(400).json({ errors: safeDATA.error.flatten().fieldErrors });
+            }
+
+            let perPage = 2;
+            let currentPage = safeDATA.data.page ?? 0;
+            const tweetGet = await getTweetServices(slug, currentPage, perPage);
+
+            return res.status(200).json({ 
+                message: "Tweets Encontrados!",
+                tweetGet,
+                currentPage,
+                perPage,
+            });
+
+        }catch(error){
+            return res.status(404).json({ errors: "Nenhum encontrados"});
+        }
+    
+
+    }
+
+
+
 
 
 }

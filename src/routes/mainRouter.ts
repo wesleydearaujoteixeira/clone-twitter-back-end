@@ -12,10 +12,8 @@ mainRouter.post('/tweet', VerificationService.getVerification, Controller.Tweete
 mainRouter.get('/tweet/:id', VerificationService.getVerification, Controller.TweeterGetId);
 mainRouter.get('/tweet/:id/answers', VerificationService.getVerification, Controller.getAnswers);
 mainRouter.post('/tweet/:id/like' , VerificationService.getVerification, Controller.isLiked);
-
-
-// mainRouter.get('/user/:slug');
-// mainRouter.post('/user/:slug/tweets');
+mainRouter.get('/user/:slug', VerificationService.getVerification, Controller.userByIslug);
+mainRouter.get('/user/:slug/tweets', VerificationService.getVerification, Controller.TweetUser );
 // mainRouter.post('/user/:slug/follow');
 // mainRouter.put('/user');
 // mainRouter.post('/user/avatar');

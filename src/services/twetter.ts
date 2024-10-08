@@ -138,3 +138,51 @@ export const likeTweet = async (userSlug: string, id: number) => {
         data: { userSlug, tweetId: id}
     });
 }
+
+
+export const followTweet = async (slug: string) => {
+    const follow = await prisma.follow.count({
+        where: { user1Slug: slug }
+    });
+
+    return follow;
+}
+
+
+export const followTweetTwo = async (slug: string) => {
+    const follow = await prisma.follow.count({
+        where: { user2Slug: slug }
+    });
+
+    return follow;
+}
+
+export const getTweetFollowers = async (slug: string) => {
+    const totTweet = await prisma.tweet.count({
+        where: { userSlug: slug }
+    });
+
+    return totTweet;
+}
+
+export const getTweetServices = async (slug: string, currentPage: number, perPage: number) => {
+    
+    const TweetGet = await prisma.tweet.findMany({
+        
+        include: {
+            likes: {
+                select: {
+                    userSlug: true,
+                }
+            }
+        },
+        
+        where: { userSlug: slug, answerOf: 0 },
+        orderBy: {createdAt: 'desc'},
+        skip: currentPage * perPage,
+        take: perPage
+
+    });
+
+    return TweetGet;
+}

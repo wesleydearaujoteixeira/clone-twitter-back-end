@@ -16,3 +16,7 @@ export const schemaPOSTObject = z.object({
     body: z.string({ message: "É necessário um corpo para os comentarios "}),
     answer: z.string().optional()
 });
+
+export const schemaQueryObject = z.object({
+    page: z.coerce.number().min(0).optional()
+});
